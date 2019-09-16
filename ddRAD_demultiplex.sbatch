@@ -62,8 +62,4 @@ parallel --no-notice --link "process_radtags -1 $FQpath/{1}$R1Ext -2 $FQpath/{1}
 
 start="Barcode\tFilename"; end="^\s*$"; sed -n "/$start.*/,/$end/{/$start.*/b;/$end/b;p}" demultiplexed_seqs_$4/process_radtags.log | \
         sed -e 's/\t/,/g' > demultiplexed_seqs_$4/process_radtags.csv
-		
-		
-		
-
 
