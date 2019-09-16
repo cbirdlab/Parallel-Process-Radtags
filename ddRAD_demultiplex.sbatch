@@ -9,19 +9,23 @@
 module load stacks
 module load parallel
 
+#specify the file paths for the demultiplex and read 1 fq files and demultiplex the fq files in parallel
+#example line to run this script:
+#sbatch ddRAD_demultiplex.sbatch
+
 #populate variables
 DMXfiles=*_demultiplex.txt
 FQfiles=*_1.fq.gz
 R1Ext=_1.fq.gz
 R2Ext=_2.fq.gz
-NumNestedDirs=echo "$DMXfiles" | tr "/" "\n" | head -n -1 | wc -l
+NumNestedDirs=$(echo "$DMXfiles" | tr "/" "\n" | head -n -1 | wc -l)
 
 if [ "$NumNestedDirs" == 0 ]; then
 	DMXpath=""
 	FQpath=""
 else
-	DMXpath=dirname "$(echo "$DMXfiles")"
-	FQpath=dirname "$(echo "$FQfiles")"
+	DMXpath=$(dirname "$(echo "$DMXfiles")")
+	FQpath=$(dirname "$(echo "$FQfiles")")
 fi
 
 # make a list of file name bases for the decode files
@@ -32,17 +36,18 @@ NumDMX=$(wc -l dmx.txt | cut -d " " -f1)
 ls $FQfiles | sed "s/$R1Ext//g" | parallel -k --no-notice basename > fq.txt
 NumFQ=$(wc -l fq.txt | cut -d " " -f1) 
 
+#check to make sure that there are the same number of demultiplex and fastq files
 if [[ $NumFQ != $NumDMX ]]; then 
 	echo There are $NumDMX demultiplex files and $NumFQ fastq files.  They should be equal.
 	echo Exiting
 	exit
 fi
 
-#create the directory where the demultiplexed sequences will go
+#create the directories where the demultiplexed sequences will go
 parallel --no-notice mkdir demultiplexed_seqs_{} :::: dmx.txt
 
 #demultiplx the fq files
-parallel --no-notice --link "process_radtags -1 {1}$R1Ext -2 {1}$R2Ext -i gzfastq -b {2}_demultiplex.txt -r -e sbfI -o demultiplexed_seqs_{2} -D --bestrad" :::: fq.txt :::: dmx.txt
+parallel --no-notice --link "process_radtags -1 $FQpath/{1}$R1Ext -2 $FQpath/{1}$R2Ext -i gzfastq -b {2}_demultiplex.txt -r -e sbfI -o demultiplexed_seqs_{2} -D --bestrad" :::: fq.txt :::: dmx.txt
 
 
 # -1 designates the read 1 file in a set of paired-end sequences. This needs to match the sequence file name.
