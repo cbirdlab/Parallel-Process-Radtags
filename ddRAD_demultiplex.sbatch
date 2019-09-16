@@ -13,15 +13,11 @@
 #SBATCH --mail-type=begin  # email me when the job starts
 #SBATCH --mail-type=end    # email me when the job finish
 
-#Have to tell the hpc which software it need to load to run your job, the numbers after the programs are the version numbers
-#for now just leave all of these programs up. probably dont need all of them
 module load stacks
+module load parallel
 
 #create the directory where the demultiplexed sequences will go
 mkdir demultiplexed_seqs_$4
-
-#Load parallel
-module load parallel
 
 ls *_demultiplex.txt | sed 's/_demultiplex.txt//g' > y.txt # makes a list variable of the correct file format from the front of the demultiplex.txt file.
 ls *_R1*.fastq.gz | sed 's/_R1_001.fastq.gz//g' > x.txt  # makes a list variable with the correct file start format Read 1.fastq.gz files.
