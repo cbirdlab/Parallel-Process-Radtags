@@ -47,7 +47,7 @@ fi
 parallel --no-notice mkdir demultiplexed_seqs_{} :::: dmx.txt
 
 #demultiplx the fq files
-parallel --no-notice --link "process_radtags -1 $FQpath/{1}$R1Ext -2 $FQpath/{1}$R2Ext -i gzfastq -b {2}_demultiplex.txt -r -e sbfI -o demultiplexed_seqs_{2} -D --bestrad" :::: fq.txt :::: dmx.txt
+parallel --no-notice --link "process_radtags -1 $FQpath/{1}$R1Ext -2 $FQpath/{1}$R2Ext -i gzfastq -b $DMXpath/{2}_demultiplex.txt -r -e sbfI -o demultiplexed_seqs_{2} -D --bestrad" :::: fq.txt :::: dmx.txt
 
 
 # -1 designates the read 1 file in a set of paired-end sequences. This needs to match the sequence file name.
