@@ -1,10 +1,5 @@
 #!/bin/bash
 
-#separate the pools into folders with the barcode text file
-#copy this file into the pool folders
-#change the job name to whatever you want it named
-
-# the hashtag and SBATCH are not commented out these are commands for the HPC
 #SBATCH --job-name=
 #SBATCH --time=96:00:00
 #SBATCH -p normal
@@ -19,7 +14,8 @@ module load parallel
 #create the directory where the demultiplexed sequences will go
 mkdir demultiplexed_seqs_$4
 
-ls *_demultiplex.txt | sed 's/_demultiplex.txt//g' > y.txt # makes a list variable of the correct file format from the front of the demultiplex.txt file.
+# make a list of generic file names
+ls *_demultiplex.txt | sed 's/_demultiplex.txt//g' > y.txt 
 ls *_R1*.fastq.gz | sed 's/_R1_001.fastq.gz//g' > x.txt  # makes a list variable with the correct file start format Read 1.fastq.gz files.
 parallel --link "process_radtags -1 {1}_R1_001.fastq.gz -2 {1}_R2_001.fastq.gz -i gzfastq -b {2}_demultiplex.txt -r -e ecoRI -o demultiplexed_seqs_$4 -D" :::: x.txt :::: y.txt
 
