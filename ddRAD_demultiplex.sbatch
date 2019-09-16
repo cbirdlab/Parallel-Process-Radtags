@@ -10,17 +10,29 @@ module load stacks
 module load parallel
 
 #populate variables
-DMXdir=demultiplexed_seqs_$4
 DMXfiles=*_demultiplex.txt
-preDMXfq=*_R1*.fastq.gz
+preDMXfq=*_1.fq.gz
+R1Ext=_1.fq.gz
+R2Ext=_2.fq.gz
+NumNestedDirs=echo "$DMXfiles" | tr "/" "\n" | head -n -1 | wc -l
+
+if [ "$NumNestedDirs" == 0 ]; then
+
+else
+	
+fi
+
+# make a list of file name bases for the decode files
+ls $DMXfiles | sed 's/_demultiplex.txt//g' > dmx.txt 
+
+# make a list of fq file name bases
+ls $preDMXfq | sed "s/$R1Ext//g" > fq.txt 
 
 #create the directory where the demultiplexed sequences will go
-mkdir $DMXdir
+parallel --no-notice mkdir demultiplexed_seqs_{} :::: dmx.txt
 
-# make a list of generic file names
-ls $DMXfiles | sed 's/_demultiplex.txt//g' > y.txt 
-ls $preDMXfq | sed 's/_R1_001.fastq.gz//g' > x.txt  # makes a list variable with the correct file start format Read 1.fastq.gz files.
-parallel --link "process_radtags -1 {1}_R1_001.fastq.gz -2 {1}_R2_001.fastq.gz -i gzfastq -b {2}_demultiplex.txt -r -e ecoRI -o demultiplexed_seqs_$4 -D" :::: x.txt :::: y.txt
+#demultiplx the fq files
+parallel --no-notice --link "process_radtags -1 {1}$R1Ext -2 {1}$R2Ext -i gzfastq -b {2}_demultiplex.txt -r -e sbfI -o demultiplexed_seqs_{2} -D --bestrad" :::: fq.txt :::: dmx.txt
 
 
 # -1 designates the read 1 file in a set of paired-end sequences. This needs to match the sequence file name.
