@@ -4,19 +4,22 @@
 #SBATCH --time=96:00:00
 #SBATCH -p normal
 #SBATCH --nodes=1
-#SBATCH --mail-user=
-#SBATCH --mail-type=begin  # email me when the job starts
-#SBATCH --mail-type=end    # email me when the job finish
 
+#load software tools
 module load stacks
 module load parallel
 
+#populate variables
+DMXdir=demultiplexed_seqs_$4
+DMXfiles=*_demultiplex.txt
+preDMXfq=*_R1*.fastq.gz
+
 #create the directory where the demultiplexed sequences will go
-mkdir demultiplexed_seqs_$4
+mkdir $DMXdir
 
 # make a list of generic file names
-ls *_demultiplex.txt | sed 's/_demultiplex.txt//g' > y.txt 
-ls *_R1*.fastq.gz | sed 's/_R1_001.fastq.gz//g' > x.txt  # makes a list variable with the correct file start format Read 1.fastq.gz files.
+ls $DMXfiles | sed 's/_demultiplex.txt//g' > y.txt 
+ls $preDMXfq | sed 's/_R1_001.fastq.gz//g' > x.txt  # makes a list variable with the correct file start format Read 1.fastq.gz files.
 parallel --link "process_radtags -1 {1}_R1_001.fastq.gz -2 {1}_R2_001.fastq.gz -i gzfastq -b {2}_demultiplex.txt -r -e ecoRI -o demultiplexed_seqs_$4 -D" :::: x.txt :::: y.txt
 
 
