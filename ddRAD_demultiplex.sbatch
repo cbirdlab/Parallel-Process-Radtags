@@ -11,22 +11,32 @@ module load parallel
 
 #populate variables
 DMXfiles=*_demultiplex.txt
-preDMXfq=*_1.fq.gz
+FQfiles=*_1.fq.gz
 R1Ext=_1.fq.gz
 R2Ext=_2.fq.gz
 NumNestedDirs=echo "$DMXfiles" | tr "/" "\n" | head -n -1 | wc -l
 
 if [ "$NumNestedDirs" == 0 ]; then
-
+	DMXpath=""
+	FQpath=""
 else
-	
+	DMXpath=dirname "$(echo "$DMXfiles")"
+	FQpath=dirname "$(echo "$FQfiles")"
 fi
 
 # make a list of file name bases for the decode files
-ls $DMXfiles | sed 's/_demultiplex.txt//g' > dmx.txt 
+ls $DMXfiles | sed 's/_demultiplex.txt//g' | parallel -k --no-notice basename > dmx.txt 
+NumDMX=$(wc -l dmx.txt | cut -d " " -f1)
 
 # make a list of fq file name bases
-ls $preDMXfq | sed "s/$R1Ext//g" > fq.txt 
+ls $FQfiles | sed "s/$R1Ext//g" | parallel -k --no-notice basename > fq.txt
+NumFQ=$(wc -l fq.txt | cut -d " " -f1) 
+
+if [[ $NumFQ != $NumDMX ]]; then 
+	echo There are $NumDMX demultiplex files and $NumFQ fastq files.  They should be equal.
+	echo Exiting
+	exit
+fi
 
 #create the directory where the demultiplexed sequences will go
 parallel --no-notice mkdir demultiplexed_seqs_{} :::: dmx.txt
