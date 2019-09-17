@@ -18,36 +18,37 @@ newRAD_demultiplex.sbatch is for single-digest RAD data that has 1 ligated barco
   ```
   The base names of the demultiplex decode files should match those of the fq files they refer to, and the code assumes that the name of the   demultiplex decode files ends with `_demultiplex.txt`
 
-Clone this repo to your computer
-```
-git clone https://github.com/cbirdlab/RAD_demultiplex.git
-```
+* Clone this repo to your computer
+  ```
+  git clone https://github.com/cbirdlab/RAD_demultiplex.git
+  ```
 
-Copy the appropriate script to the directory where you want the demultiplexed files to be saved.
+* Copy the appropriate script to the directory where you want the demultiplexed files to be saved.
 
-No commandline arguments are accepted.  To specify where your data is, edit the following variables which hold the paths to the demultiplex decode and fastq files as well as the READ1 & READ2 file extensions used:
-```
-#populate variables
-DMXfiles=*_demultiplex.txt
-FQfiles=*_1.fq.gz
-R1Ext=_1.fq.gz
-R2Ext=_2.fq.gz
-```
+* No commandline arguments are accepted.  To specify where your data is, edit the following variables which hold the paths to the demultiplex decode and fastq files as well as the READ1 & READ2 file extensions used:
+  ```
+  #populate variables
+  DMXfiles=*_demultiplex.txt
+  FQfiles=*_1.fq.gz
+  R1Ext=_1.fq.gz
+  R2Ext=_2.fq.gz
+  ```
 
-Edit the following `SBATCH` commands to work with your cluster
-```
-#SBATCH -p normal
-#SBATCH --nodes=1
+* Edit the following `SBATCH` commands to work with your cluster
+  ```
+  #SBATCH -p normal
+  #SBATCH --nodes=1
 
-#load software tools
-module load stacks
-module load parallel
-```
+  #load software tools
+  module load stacks
+  module load parallel
+  ```
 
-Run the script
-```
-sbatch ddRAD_demultiplex.sbatch
-```
-```
-sbatch newRAD_demultiplex.sbatch
-```
+* Run the script
+  ```
+  sbatch ddRAD_demultiplex.sbatch
+  ```
+  or
+  ```
+  sbatch newRAD_demultiplex.sbatch
+  ```
