@@ -1,6 +1,6 @@
 # *RAD_demultiplex
 
-Scripts to demultiplex internally barcoded fastq files on a SLURM scheduled HPC cluster in parallel.  With some mild hacking, this will run on a workstation in bash.  Each pair of fastq files to be demultiplexed can be run on a different thread. Demultiplexed fastq files are saved to directories in the `pwd`.
+Scripts to demultiplex internally barcoded fastq files on a SLURM scheduled HPC cluster in parallel.  With some mild hacking, this will run on a workstation in bash.  Each pair of fastq files to be demultiplexed can be run on a different thread if multiple files are specified in the `DMXfiles` and `FQfiles` variables, see *To Run* below. Demultiplexed fastq files are saved to directories in the `pwd`.
 
 ddRAD_demultiplex.sbatch is for double-digest RAD data
 
