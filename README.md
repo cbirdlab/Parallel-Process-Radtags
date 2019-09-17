@@ -1,6 +1,6 @@
 # *RAD_demultiplex
 
-Scripts to demultiplex internally barcoded fastq files on a SLURM scheduled HPC cluster in parallel.  With some mild hacking, this will run on a workstation in bash.  Demultiplexed fastq files are saved to directories in the `pwd`.
+Scripts to demultiplex internally barcoded fastq files on a SLURM scheduled HPC cluster in parallel.  With some mild hacking, this will run on a workstation in bash.  Each pair of fastq files to be demultiplexed can be run on a different thread. Demultiplexed fastq files are saved to directories in the `pwd`.
 
 ddRAD_demultiplex.sbatch is for double-digest RAD data
 
@@ -10,6 +10,12 @@ newRAD_demultiplex.sbatch is for single-digest RAD data that has 1 ligated barco
   * Indels at the beginning of the sequence, which are quite common - I have to code a solution to this using `agrep `
 
 ## To Run
+
+Prepare your files.  There should be 1 demultiplex decode file per pair of fastq files (assuming paired end sequencing, R1 & R2), and each should be formatted with the first column being the barcodes, a tab, and the second column being the base name of the resulting demultiplexed sequences:
+```
+GGAAGCCGGT      PIRE2019-Ssp-C-Gub_096-Plate1Pool6Seq1-2G-L4
+GGCGATGCTC      PIRE2019-Ssp-C-Gub_068-Plate1Pool6Seq1-2G-L4
+```
 
 Clone this repo to your computer
 ```
