@@ -16,6 +16,7 @@ Prepare your files.  There should be 1 demultiplex decode file per pair of fastq
 GGAAGCCGGT      PIRE2019-Ssp-C-Gub_096-Plate1Pool6Seq1-2G-L4
 GGCGATGCTC      PIRE2019-Ssp-C-Gub_068-Plate1Pool6Seq1-2G-L4
 ```
+The base names of the demultiplex decode files should match those of the fq files they refer to, and the code assumes that the name of the demultiplex decode files ends with `_demultiplex.txt`
 
 Clone this repo to your computer
 ```
