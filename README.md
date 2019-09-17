@@ -7,16 +7,16 @@ ddRAD_demultiplex.sbatch is for double-digest RAD data
 newRAD_demultiplex.sbatch is for single-digest RAD data that has 1 ligated barcode followed by ezRAD sequencing (aka newRAD or bestRAD)
 * Note that `process_radtags` which is harnessed by this script cannot handle
   * The remaining restriction site before the barcode, for SbfI, it's `GG`, so it should be added to the barcode in the demultiplex decode files
-  * Indels at the beginning of the sequence, which are quite common - I have to code a solution to this using `agrep `
+  * *_Indels at the beginning of the sequence reads, which are quite common. I have to code a solution to this using `agrep ` _*
 
 ## To Run
 
-Prepare your files.  There should be 1 demultiplex decode file per pair of fastq files (assuming paired end sequencing, R1 & R2), and each should be formatted with the first column being the barcodes, a tab, and the second column being the base name of the resulting demultiplexed sequences:
-```
-GGAAGCCGGT      PIRE2019-Ssp-C-Gub_096-Plate1Pool6Seq1-2G-L4
-GGCGATGCTC      PIRE2019-Ssp-C-Gub_068-Plate1Pool6Seq1-2G-L4
-```
-The base names of the demultiplex decode files should match those of the fq files they refer to, and the code assumes that the name of the demultiplex decode files ends with `_demultiplex.txt`
+* Prepare your files.  There should be 1 demultiplex decode file per pair of fastq files (assuming paired end sequencing, R1 & R2), and each should be formatted with the first column being the barcodes, a tab, and the second column being the base name of the resulting demultiplexed sequences:
+  ```
+  GGAAGCCGGT      PIRE2019-Ssp-C-Gub_096-Plate1Pool6Seq1-2G-L4
+  GGCGATGCTC      PIRE2019-Ssp-C-Gub_068-Plate1Pool6Seq1-2G-L4
+  ```
+  The base names of the demultiplex decode files should match those of the fq files they refer to, and the code assumes that the name of the   demultiplex decode files ends with `_demultiplex.txt`
 
 Clone this repo to your computer
 ```
