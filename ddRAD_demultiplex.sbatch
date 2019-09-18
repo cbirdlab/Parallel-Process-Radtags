@@ -18,13 +18,18 @@ DMXfiles=*_demultiplex.txt
 FQfiles=*_1.fq.gz
 R1Ext=_1.fq.gz
 R2Ext=_2.fq.gz
-NumNestedDirs=$(echo "$DMXfiles" | tr "/" "\n" | head -n -1 | wc -l)
+dmxNumNestedDirs=$(echo "$DMXfiles" | tr "/" "\n" | head -n -1 | wc -l)
+fqNumNestedDirs=$(echo "$FQfiles" | tr "/" "\n" | head -n -1 | wc -l)
 
-if [ "$NumNestedDirs" == 0 ]; then
+if [ "$dmxNumNestedDirs" == 0 ]; then
 	DMXpath=""
-	FQpath=""
 else
 	DMXpath=$(dirname "$(echo "$DMXfiles")")
+fi
+
+if [ "$fqNumNestedDirs" == 0 ]; then
+	FQpath=""
+else
 	FQpath=$(dirname "$(echo "$FQfiles")")
 fi
 
