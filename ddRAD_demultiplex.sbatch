@@ -22,13 +22,13 @@ dmxNumNestedDirs=$(echo "$DMXfiles" | tr "/" "\n" | head -n -1 | wc -l)
 fqNumNestedDirs=$(echo "$FQfiles" | tr "/" "\n" | head -n -1 | wc -l)
 
 if [ "$dmxNumNestedDirs" == 0 ]; then
-	DMXpath=""
+	DMXpath="."
 else
 	DMXpath=$(dirname "$(echo "$DMXfiles")")
 fi
 
 if [ "$fqNumNestedDirs" == 0 ]; then
-	FQpath=""
+	FQpath="."
 else
 	FQpath=$(dirname "$(echo "$FQfiles")")
 fi
