@@ -12,11 +12,39 @@ newRAD_demultiplex.sbatch is for single-digest RAD data that has 1 ligated barco
 ## To Run
 
 * Prepare your files.  There should be 1 demultiplex decode file per pair of fastq files (assuming paired end sequencing, R1 & R2), and each should be formatted with the first column being the barcodes, a tab, and the second column being the base name of the resulting demultiplexed sequences:
+  
   ```
   GGAAGCCGGT      PIRE2019-Ssp-C-Gub_096-Plate1Pool6Seq1-2G-L4
   GGCGATGCTC      PIRE2019-Ssp-C-Gub_068-Plate1Pool6Seq1-2G-L4
   ```
-  The base names of the demultiplex decode files should match those of the fq files they refer to, and the code assumes that the name of the   demultiplex decode files ends with `_demultiplex.txt`
+  
+  The base names of the demultiplex decode files should match those of the fq files they refer to, and the code assumes that the name of the   demultiplex decode files ends with `_demultiplex.txt`.  For example, consider the following fq.gz and demultiplex files that don't match the desired format:
+  
+  ```
+  20180215_opihi_2017Cex_P1P1_S109_L5678_R1.fq.gz
+  20180215_opihi_2017Cex_P1P1_S109_L5678_R2.fq.gz
+  20180215_opihi_2017Cex_P1P2_S110_L5678_R1.fq.gz
+  20180215_opihi_2017Cex_P1P2_S110_L5678_R2.fq.gz
+  OpihiSK2017Plate1Pool1_demultiplex.txt
+  OpihiSK2017Plate1Pool2_demultiplex.txt
+  ```
+  
+  The demultiplex files can be renamed as follows to conform with the desired format:
+  
+  ```
+  ls *.txt > filesToRename.txt
+  ls *R1*gz | sed 's/_R1\.fq\.gz//g' > desired_basenames.txt
+  parallel --no-notice -kj10 --link mv {1} {2}_demultiplex.txt :::: filesToRename.txt desired_basenames.txt
+  ```
+  
+  ```
+  20180215_opihi_2017Cex_P1P1_S109_L5678_demultiplex.txt
+  20180215_opihi_2017Cex_P1P1_S109_L5678_R1.fq.gz
+  20180215_opihi_2017Cex_P1P1_S109_L5678_R2.fq.gz
+  20180215_opihi_2017Cex_P1P2_S110_L5678_demultiplex.txt
+  20180215_opihi_2017Cex_P1P2_S110_L5678_R1.fq.gz
+  20180215_opihi_2017Cex_P1P2_S110_L5678_R2.fq.gz
+  ```
 
 * Clone this repo to your computer
   ```
