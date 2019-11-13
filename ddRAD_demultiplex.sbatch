@@ -68,8 +68,6 @@ parallel --no-notice --link "process_radtags -1 $FQpath/{1}$R1Ext -2 $FQpath/{1}
 start="Barcode\tFilename"; end="^\s*$"; sed -n "/$start.*/,/$end/{/$start.*/b;/$end/b;p}" demultiplexed_seqs_$4/process_radtags.log | \
         sed -e 's/\t/,/g' > demultiplexed_seqs_$4/process_radtags.csv
 
-echo ""; echo "Reads Retained:"
-echo PoolID,NumReadsRet,PropReadsRet
 QuantReadsRetained(){
 	logPATH=$1
 	RESULT=$(head -n 4 $logPATH | tail -n1)
@@ -78,4 +76,7 @@ QuantReadsRetained(){
 	echo -n ${logPATH}, && echo -n ${RetainedReads}, && echo $RetainedReads / $TotalReads | bc -l
 }
 export -f QuantReadsRetained
-find . -name 'process*log' | parallel --no-notice -kj10 "QuantReadsRetained {}"
+echo ""; echo "Reads Retained:"
+echo PoolID,NumReadsRet,PropReadsRet
+parallel --record-env
+find . -name 'process*log' | parallel --env _ --no-notice "QuantReadsRetained {}"
